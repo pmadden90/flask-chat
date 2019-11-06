@@ -1,15 +1,21 @@
 import os
+from datetime import datetime
 from flask import Flask, redirect
 
 app = Flask(__name__)
 messages = []
 
+
 def add_messages(username, message):
-    messages.append("{}: {}".format(username, message))
+    """Add messages to the `messages` list"""
+    now = datetime.now().strftime("%H:%M:%S")
+    messages.append("({}) {}: {}".format(now, username, message))
+
 
 def get_all_messages():
     """Get all of the messages and separate them with a `br`"""
     return "<br>".join(messages)
+
 
 @app.route("/")
 def index():
@@ -29,4 +35,4 @@ def send_message(username, message):
     add_messages(username, message)
     return redirect("/" + username)
 
-app.run(os.getenv('IP'), port=int(os.getenv('PORT', '8080')), debug=True)
+app.run(os.getenv('IP'), port=int(os.getenv('PORT', '5000')), debug=True)
